@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="majorgroup" targetNamespace="http://tempuri.org/majorgroup.xsd" xmlns:mstns="http://tempuri.org/majorgroup.xsd" xmlns="http://tempuri.org/majorgroup.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="MySettings" AppSettingsPropertyName="OracleDBConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="OracleDBConnectionString (MySettings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.Oracle_reporting_tool.My.MySettings.GlobalReference.Default.OracleDBConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="dts_detailsTableAdapter" GeneratorDataComponentClassName="dts_detailsTableAdapter" Name="dts_details" UserDataComponentName="dts_detailsTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="OracleDBConnectionString (MySettings)" DbObjectName="OracleDB.dbo.dts_details" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT locationname, MAJORGROUPNAME, SUM(CASE WHEN TRANSACTIONTYPE = 'item Sale' THEN linecount ELSE 0 END) AS major_count, SUM(CASE WHEN TRANSACTIONTYPE = 'item Sale' THEN linetotal ELSE 0 END) AS gross_amt, 
+                  ROUND(SUM(CASE WHEN TRANSACTIONTYPE = 'item Sale' THEN (LessVAT + LessSC + LessPWD + lessEMP + lessNationalAth) ELSE 0 END), 2) AS itemDiscount, 
+                  SUM(CASE WHEN TRANSACTIONTYPE = 'item Sale' THEN linetotal ELSE 0 END) - SUM(CASE WHEN TRANSACTIONTYPE = 'item Sale' THEN (LessVAT + LessSC + LessPWD + lessEMP + lessNationalAth) ELSE 0 END) AS net_amt
+FROM     dts_details
+WHERE  (MAJORGROUPNAME IS NOT NULL) and GUESTCHECKID IN (
+    SELECT DISTINCT GUESTCHECKID
+    FROM dts_details
+   WHERE TENDERNAME IN ('CASH','GRAB FOOD', 'FOOD PANDA','Debit Card', 'Master Card', 'QR PH', 'VISA', 'AMEX', 'JCB', 'Diners', 'BDO PAY', 'GC', 'SM Online Pay','UNION PAY', 'WECHAT','Botty Epay','GCASH'))
+   and TRANSACTIONTYPE &lt;&gt; 'Other'
+GROUP BY locationname, majorgroupname</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="locationname" DataSetColumn="locationname" />
+              <Mapping SourceColumn="MAJORGROUPNAME" DataSetColumn="MAJORGROUPNAME" />
+              <Mapping SourceColumn="major_count" DataSetColumn="major_count" />
+              <Mapping SourceColumn="gross_amt" DataSetColumn="gross_amt" />
+              <Mapping SourceColumn="itemDiscount" DataSetColumn="itemDiscount" />
+              <Mapping SourceColumn="net_amt" DataSetColumn="net_amt" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+        </Tables>
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="majorgroup" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="majorgroup" msprop:Generator_UserDSName="majorgroup">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="dts_details" msprop:Generator_TableClassName="dts_detailsDataTable" msprop:Generator_TableVarName="tabledts_details" msprop:Generator_TablePropName="dts_details" msprop:Generator_RowDeletingName="dts_detailsRowDeleting" msprop:Generator_RowChangingName="dts_detailsRowChanging" msprop:Generator_RowEvHandlerName="dts_detailsRowChangeEventHandler" msprop:Generator_RowDeletedName="dts_detailsRowDeleted" msprop:Generator_UserTableName="dts_details" msprop:Generator_RowChangedName="dts_detailsRowChanged" msprop:Generator_RowEvArgName="dts_detailsRowChangeEvent" msprop:Generator_RowClassName="dts_detailsRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="locationname" msprop:Generator_ColumnVarNameInTable="columnlocationname" msprop:Generator_ColumnPropNameInRow="locationname" msprop:Generator_ColumnPropNameInTable="locationnameColumn" msprop:Generator_UserColumnName="locationname" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="MAJORGROUPNAME" msprop:Generator_ColumnVarNameInTable="columnMAJORGROUPNAME" msprop:Generator_ColumnPropNameInRow="MAJORGROUPNAME" msprop:Generator_ColumnPropNameInTable="MAJORGROUPNAMEColumn" msprop:Generator_UserColumnName="MAJORGROUPNAME" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="major_count" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnmajor_count" msprop:Generator_ColumnPropNameInRow="major_count" msprop:Generator_ColumnPropNameInTable="major_countColumn" msprop:Generator_UserColumnName="major_count" type="xs:int" minOccurs="0" />
+              <xs:element name="gross_amt" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columngross_amt" msprop:Generator_ColumnPropNameInRow="gross_amt" msprop:Generator_ColumnPropNameInTable="gross_amtColumn" msprop:Generator_UserColumnName="gross_amt" type="xs:decimal" minOccurs="0" />
+              <xs:element name="itemDiscount" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnitemDiscount" msprop:Generator_ColumnPropNameInRow="itemDiscount" msprop:Generator_ColumnPropNameInTable="itemDiscountColumn" msprop:Generator_UserColumnName="itemDiscount" type="xs:decimal" minOccurs="0" />
+              <xs:element name="net_amt" msdata:ReadOnly="true" msprop:Generator_ColumnVarNameInTable="columnnet_amt" msprop:Generator_ColumnPropNameInRow="net_amt" msprop:Generator_ColumnPropNameInTable="net_amtColumn" msprop:Generator_UserColumnName="net_amt" type="xs:decimal" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
